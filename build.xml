@@ -1,0 +1,48 @@
+<project name="Vulnerability Management System" default="all">
+    <target name="all" depends="clean, compile, test, jar, docs"/>
+
+    <target name="clean">
+        <delete dir="target" quiet="true" />
+    </target>
+
+    <target name="compile">
+        <javac srcdir="src" destdir="build/classes"/>
+    </target>
+
+    <target name="test" depends="compile">
+        <mkdir dir="target/test-classes"/>
+        <javac srcdir="test" destdir="target/test-classes">
+            <classpath>
+                <pathelement location="build/classes"/>
+                <pathelement location="lib/ant-junit4.jar"/>
+            </classpath>
+        </javac>
+
+        <mkdir dir="target/test-results"/>
+        <junit haltonfailure="no" printsummary="on">
+            <classpath >
+                <pathelement location="build/classes"/>
+                <pathelement location="lib/ant-junit4.jar"/>
+                <pathelement location="target/test-classes"/>
+            </classpath>
+            <formatter type="brief" usefile="false"/>
+            <formatter type="xml" />
+            <batchtest todir="target/test-results" >
+                <fileset dir="target/test-classes" includes="**/*Test.class"/>
+            </batchtest>
+        </junit>
+    </target-->
+
+    <target name="jar" depends="compile">
+        <jar jarfile="target/vms.jar" basedir="build/classes"/>
+    </target>
+	
+	 <!-- Creates Javadoc -->
+	 <target name="docs" depends="compile">
+	    <javadoc packagenames="src" sourcepath="src" destdir="target/docs">
+	       <fileset dir="src">
+	                <include name="**" />
+	           </fileset>
+	    </javadoc>
+	  </target>	
+</project>
