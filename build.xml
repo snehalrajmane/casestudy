@@ -1,15 +1,44 @@
+<!--**************************************************************************** 
+* Project used for Vulnerability Management System with the team of people
+* Poonam, Snehal & Hemant
+* Access URL : http://<serverIP>:8080/CaseStudyVulnerability/LoginPage1.jsp
+****************************************************************************--> 
+
 <project name="Vulnerability Management System" default="all">
-    <target name="all" depends="clean, compile, test, jar, docs"/>
+  <target name="all" depends="init, initdirs, clean, compile, war, test, build"/>
+	<target name='init'>
+		<property name='app.name' value='CaseStudyVulnerability'/>
+		<property name='src.dir' location='src'/>
+		<property name='lib.dir' location='lib'/>
+		<property name='target1.dir' location='target'/>
+		<property name='classes.dir' location='build/classes'/>
+		<property name='web.dir' location='WebContent'/>
+	</target>
 
-    <target name="clean">
-        <delete dir="target" quiet="true" />
-    </target>
+	<target name='initdirs' depends='init'>
+		<mkdir dir='${classes.dir}'/>
+		<mkdir dir='${target1.dir}'/>
+	</target>
 
-    <target name="compile">
-        <javac srcdir="src" destdir="build/classes"/>
-    </target>
+	<target name='clean' depends='init, initdirs' description='Use for a clean build'>
+		<delete dir="${target1.dir}" quiet="true" />
+	</target>
+	
+	<target name='compile' depends='clean'>
+		<javac srcdir='${src.dir}' destdir='${classes.dir}'></javac>
+	</target>
 
-    <target name="test" depends="compile">
+	<target name='war' depends='compile'>
+		<war destFile='${target1.dir}/${app.name}.war' webxml='${web.dir}/WEB-INF/web.xml'>
+		  <classes dir='${classes.dir}'/>
+		  <fileset dir='${web.dir}' excludes='WEB-INF/web.xml' />
+		</war>
+	</target>
+
+	<target name='build' depends='war' description='compile and create the war' />
+
+	<target name="test" depends="compile"/>
+    <!--target name="test" depends="compile">
         <mkdir dir="target/test-classes"/>
         <javac srcdir="test" destdir="target/test-classes">
             <classpath>
@@ -32,17 +61,12 @@
             </batchtest>
         </junit>
     </target-->
-
-    <target name="war" depends="compile">
-        <jar jarfile="target/vms.war" basedir="build/classes"/>
-    </target>
-	
-	 <!-- Creates Javadoc -->
-	 <target name="docs" depends="compile">
-	    <javadoc packagenames="src" sourcepath="src" destdir="target/docs">
-	       <fileset dir="src">
-	                <include name="**" />
-	           </fileset>
+	<!-- Creates Javadoc -->
+	<!--target name="docs" depends="compile">
+		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${target1.dir}/docs">
+			<fileset dir="${src.dir}">
+				<include name="**" />
+			</fileset>
 	    </javadoc>
-	  </target>	
+	</target-->
 </project>
